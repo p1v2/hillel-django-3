@@ -1,0 +1,4 @@
+Django==5.0.1
+psycopg2==2.9.9
+djangorestframework==3.14.0
+django-debug-toolbar==4.3.0
