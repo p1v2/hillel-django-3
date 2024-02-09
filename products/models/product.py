@@ -1,25 +1,10 @@
+# Create your models here.
 from django.db import models
 
-
-class Category(models.Model):
-    name = models.CharField(max_length=120)
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "Categories"
+from products.models.tag import Tag
+from products.models.category import Category
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=120)
-
-    def __str__(self):
-        return self.name
-
-
-# Create your models here.
 class Product(models.Model):
     title = models.CharField(max_length=120)  # max_length = required
     description = models.TextField(blank=True, null=True)
@@ -30,6 +15,8 @@ class Product(models.Model):
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='products')
     tags = models.ManyToManyField(Tag, blank=True, related_name='products')
+
+    orders = models.ManyToManyField('Order', through='OrderProduct')
 
     def __str__(self):
         return f"{self.title} - {self.price}"

@@ -1,18 +1,7 @@
 from rest_framework import serializers
-
-from products.models import Product, Category, Tag
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ('id', 'name')
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ('id', 'name')
+from products.models import Product
+from products.serializers.category import CategorySerializer
+from products.serializers.tag import TagSerializer
 
 
 class ProductReadOnlySerializer(serializers.ModelSerializer):

@@ -163,7 +163,7 @@ INTERNAL_IPS = [
 # Django REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'hillelDjango3.permissions.IsAuthenticatedOrOnlyFeaturedProducts',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
