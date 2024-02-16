@@ -2,9 +2,11 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from hillelDjango3.permissions import IsOwnerOrReadOnly
-from products.models import Product, Order, Recipe
+from products.models import Product, Order, Recipe, Store, StoreInventory
 from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer
 from products.serializers.recipe import RecipeSerializer
+from products.serializers.store import StoreSerializer
+from products.serializers.store_inventory import StoreInventorySerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -36,3 +38,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [IsOwnerOrReadOnly]
+
+
+class StoreViewSet(viewsets.ModelViewSet):
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class StoreInventoryViewSet(viewsets.ModelViewSet):
+    queryset = StoreInventory.objects.all()
+    serializer_class = StoreInventorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]

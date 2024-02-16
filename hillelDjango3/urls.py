@@ -16,17 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
-from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
+from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreViewSet, StoreInventoryViewSet
 
 router = DefaultRouter()
 router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('recipes', RecipeViewSet)
+router.register('stores', StoreViewSet)
+router.register('store-inventories', StoreInventoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path("__debug__/", include("debug_toolbar.urls")),
+    path('api/token/', obtain_auth_token, name='api-token')
 ]

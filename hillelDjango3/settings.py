@@ -86,8 +86,9 @@ DATABASES = {
         # PostgreSQL
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'hilleldjango3',
+        # 'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'gddgdd',
+        'PASSWORD': '280578',
         'HOST': 'localhost',
     }
 }
