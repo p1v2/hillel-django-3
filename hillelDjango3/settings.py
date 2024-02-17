@@ -172,3 +172,7 @@ REST_FRAMEWORK = {
         'hillelDjango3.authentication.HalsoAuthentication',
     ],
 }
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
+}
