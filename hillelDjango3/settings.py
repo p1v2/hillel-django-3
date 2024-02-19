@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     "debug_toolbar",
+    'django_filters',
     # Local apps
     'products',
 ]
@@ -170,4 +171,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'hillelDjango3.authentication.HalsoAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
 }

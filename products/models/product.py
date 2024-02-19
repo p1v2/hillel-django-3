@@ -18,5 +18,9 @@ class Product(models.Model):
 
     orders = models.ManyToManyField('Order', through='OrderProduct')
 
+    # ActiveRecord
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.title} - {self.price}"

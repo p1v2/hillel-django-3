@@ -1,8 +1,10 @@
 import random
+from datetime import timedelta, datetime
 
 from django.core.management import BaseCommand
 
 from products.factories import ProductFactory, TagFactory, CategoryFactory
+from products.models import Product
 
 
 class Command(BaseCommand):
@@ -20,3 +22,14 @@ class Command(BaseCommand):
             product.tags.set(random_tags)
 
             product.save()
+        #
+        # products = Product.objects.all()
+        #
+        # for product in products:
+        #     # change created_at as random datetime from now till month ago
+        #     # random.random() return from 0 to 1
+        #     random_date = datetime.now() - timedelta(days=random.random() * 30)
+        #
+        #     product.created_at = random_date
+        #     product.save()
+
