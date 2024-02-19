@@ -1,6 +1,7 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from products.models import Product
+from products.tasks import hello_world_task
 
 
 # Create your views here.
@@ -19,3 +20,9 @@ def products_view(request, *args, **kwargs):
         })
 
     return JsonResponse({'data': products_list})
+
+
+def celery_view(request, *args, **kwargs):
+    hello_world_task.delay()
+
+    return HttpResponse("OK")
