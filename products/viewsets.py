@@ -1,7 +1,11 @@
+
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from hillelDjango3.permissions import IsOwnerOrReadOnly
+from products.filters import ProductFilter
 from products.models import Product, Order, Recipe, Store, StoreInventory
 from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer
 from products.serializers.recipe import RecipeSerializer
@@ -13,6 +17,12 @@ class ProductViewSet(viewsets.ModelViewSet):
     # select_related - for ForeignKey
     # prefetch_related - for ManyToMany
     queryset = Product.objects.select_related('category').prefetch_related('tags').all()
+
+    filterset_class = ProductFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+
+    ordering_fields = ['title', 'price', 'category', 'tags']
+    ordering = ['title', 'price', 'category', 'tags']
 
     permission_classes = [IsAuthenticatedOrReadOnly]
 

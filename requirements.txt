@@ -10,3 +10,5 @@ factory_boy==3.3.0
 python-dateutil==2.8.2
 six==1.16.0
 
+django-filter==23.5
+
