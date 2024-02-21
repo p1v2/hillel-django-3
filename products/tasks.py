@@ -1,5 +1,9 @@
+import datetime
+
 from celery import shared_task
 import requests
+from django.db.models import Sum
+
 from products.models.order import Order
 from telegram.client import send_message
 
@@ -22,3 +26,20 @@ def order_send_telegram_message(order_id):
 
     send_message(chat_id, text)
     print('Telegram message sent')
+
+
+# Celery task in  project that runs daily at 10 . Count how many orders were created during the day.
+@shared_task
+def today_count_orders():
+    # day = datetime.date.today() - datetime.timedelta(days=1)
+    # orders = Order.objects.filter(create_at__date=day).count()
+    orders_today = Order.objects.filter(create_at__date=datetime.date.today()).count()
+    print(f'Orders created yesterday: {orders_today}')
+
+@shared_task
+def top_selling_products():
+    order_today = Order.objects.filter(create_at__date=datetime.date.today()).all()
+    top_products = order_today.values('order_products__product__title').annotate(
+        total_quantity=Sum('order_products__quantity')
+    ).order_by('-total_quantity')
+    print(top_products[:3])

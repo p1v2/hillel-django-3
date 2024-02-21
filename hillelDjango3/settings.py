@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -180,11 +182,15 @@ REST_FRAMEWORK = {
 }
 
 # Celery settings
-# CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
-#
-# CELERY_BEAT_SCHEDULE = {
-#     'hello_world': {
-#         'task': 'products.tasks.hello_world_task',
-#         'schedule': 10.0,
-#     }
-# }
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+
+CELERY_BEAT_SCHEDULE = {
+    # 'hello_world': {
+    #     'task': 'products.tasks.hello_world_task',
+    #     'schedule': 10.0,
+    # }
+    'today_count_orders': {
+        'task': 'products.tasks.today_count_orders',
+        'schedule': crontab(hour='10', minute='0'),
+    }
+}
