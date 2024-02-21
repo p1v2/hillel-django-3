@@ -37,7 +37,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def latest(self, request, *args, **kwargs):
-        latest_product = self.queryset.latest('created_at')
+        latest_product = self.queryset.latest('create_at')
 
         return Response(ProductReadOnlySerializer(latest_product).data)
 

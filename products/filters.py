@@ -17,5 +17,5 @@ class ProductFilter(django_filters.FilterSet):
             'price': ['lt', 'gt'],
             'category': ['exact'],
             'tags': ['exact'],
-            'created_at': ['date__gt', 'date__lt'],
+            'create_at': ['date__gt', 'date__lt'],
         }

@@ -17,6 +17,7 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name='products')
 
     orders = models.ManyToManyField('Order', through='OrderProduct')
+    stores = models.ManyToManyField('Store', through='StoreInventory')
 
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

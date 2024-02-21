@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from products.views import celery_view
-from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
+from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreViewSet, StoreInventoryViewSet
 from telegram.views import telegram
 
 router = DefaultRouter()
