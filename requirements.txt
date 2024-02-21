@@ -3,12 +3,8 @@ psycopg2==2.9.9
 djangorestframework==3.14.0
 django-debug-toolbar==4.3.0
 uuid==1.30
-
-wheel==0.42.0
-Faker==23.2.0
-factory_boy==3.3.0
-python-dateutil==2.8.2
-six==1.16.0
-
 django-filter==23.5
-
+python-dotenv==1.0.1
+celery==5.3.6
+redis==5.0.1
+django-celery-beat==2.5.0

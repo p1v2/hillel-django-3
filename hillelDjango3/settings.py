@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7)b&=%)8_1#-%kts-sqz1ok27k8-8_xeo8k35gejoph2p=zt9-'
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['194.110.248.19', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     "debug_toolbar",
     'django_filters',
+    "django_celery_beat",
     # Local apps
     'products',
 ]
@@ -87,11 +90,10 @@ DATABASES = {
     'default': {
         # PostgreSQL
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'hilleldjango3',
-        # 'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '280578',
-        'HOST': 'localhost',
+        'NAME': os.environ["DB_NAME"],
+        'USER': os.environ["DB_USER"],
+        'PASSWORD': os.environ["DB_PASSWORD"],
+        'HOST': os.environ["DB_HOST"],
     }
 }
 
@@ -173,8 +175,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'hillelDjango3.authentication.HalsoAuthentication',
     ],
-}
-REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 8
+    'PAGE_SIZE': 10
+}
+
+# Celery settings
+CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+
+CELERY_BEAT_SCHEDULE = {
+    'hello_world': {
+        'task': 'products.tasks.hello_world_task',
+        'schedule': 10.0,
+    }
 }
