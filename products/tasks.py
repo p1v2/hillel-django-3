@@ -1,5 +1,5 @@
 from celery import shared_task
-
+import requests
 from products.models.order import Order
 from telegram.client import send_message
 

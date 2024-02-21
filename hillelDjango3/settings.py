@@ -180,7 +180,7 @@ REST_FRAMEWORK = {
 }
 
 # Celery settings
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+# CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
 
 CELERY_BEAT_SCHEDULE = {
     'hello_world': {

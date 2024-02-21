@@ -26,6 +26,8 @@ router = DefaultRouter()
 router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('recipes', RecipeViewSet)
+router.register('stores', StoreViewSet)
+router.register('store-inventories', StoreInventoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
