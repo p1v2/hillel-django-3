@@ -9,4 +9,5 @@ class OrderProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderProduct
-        fields = ['product_id', 'quantity']
+        fields = '__all__'
+        # fields = ['product_id', 'quantity']

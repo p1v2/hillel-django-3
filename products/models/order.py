@@ -27,3 +27,6 @@ class Order(models.Model):
         for order_product in self.order_products.all():
             total_price += order_product.price
         return total_price
+
+    def __str__(self):
+        return f"{self.uuid} : {self.user.username} - {self.total_price}"

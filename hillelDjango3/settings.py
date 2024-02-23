@@ -185,12 +185,16 @@ REST_FRAMEWORK = {
 CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
 
 CELERY_BEAT_SCHEDULE = {
-    # 'hello_world': {
-    #     'task': 'products.tasks.hello_world_task',
-    #     'schedule': 10.0,
-    # }
+    'hello_world': {
+        'task': 'products.tasks.hello_world_task',
+        'schedule': 5.0,
+    },
     'today_count_orders': {
         'task': 'products.tasks.today_count_orders',
+        'schedule': crontab(hour='10', minute='0'),
+    },
+    'top_selling_products': {
+        'task': 'products.tasks.top_selling_products',
         'schedule': crontab(hour='10', minute='0'),
     }
 }

@@ -18,9 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from products.views import celery_view
+from products.views import celery_view, top_selling_products_view
 from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreViewSet, StoreInventoryViewSet
 from telegram.views import telegram
+from products.tasks import today_count_orders as today_count_orders_view
 
 router = DefaultRouter()
 router.register('products', ProductViewSet)
@@ -34,5 +35,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('telegram/', telegram),
     path('celery/', celery_view),
+    path("today_count_orders/", today_count_orders_view),
+    path("top_selling_products/", top_selling_products_view),
     path("__debug__/", include("debug_toolbar.urls")),
 ]
