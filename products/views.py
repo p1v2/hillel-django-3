@@ -1,7 +1,9 @@
+import datetime
+
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from products.models import Product
+from products.models import Product, Order
 from products.tasks import hello_world_task, today_count_orders, top_selling_products
 
 
@@ -39,9 +41,11 @@ def celery_view(request, *args, **kwargs):
 #     else:
 #         return JsonResponse({'error': 'Method not allowed'}, status=405)
 def today_count_orders_view(request):
-    result = today_count_orders.delay()
+    day = datetime.date.today() - datetime.timedelta(days=1)
+    result = Order.objects.filter(created_at__date=day).count()
+    # result = today_count_orders.delay()
     # orders_count = result.get() if result.ready() else 'Task not yet complete'
-    return HttpResponse(f'Orders created yesterday: {result.get()}')
+    return HttpResponse(f'Orders created yesterday: {result}')
 
 
 

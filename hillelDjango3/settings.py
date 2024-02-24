@@ -183,6 +183,7 @@ REST_FRAMEWORK = {
 
 # Celery settings
 CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
 
 CELERY_BEAT_SCHEDULE = {
     'hello_world': {
@@ -191,7 +192,8 @@ CELERY_BEAT_SCHEDULE = {
     },
     'today_count_orders': {
         'task': 'products.tasks.today_count_orders',
-        'schedule': crontab(hour='10', minute='0'),
+        'schedule': 5.0,
+        # 'schedule': crontab(hour='10', minute='0'),
     },
     'top_selling_products': {
         'task': 'products.tasks.top_selling_products',
