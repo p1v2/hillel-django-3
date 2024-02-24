@@ -18,10 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from products.views import celery_view, top_selling_products_view
+from products.views import celery_view, top_selling_products_view, today_count_orders_view
 from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreViewSet, StoreInventoryViewSet
 from telegram.views import telegram
-from products.tasks import today_count_orders as today_count_orders_view
+
 
 router = DefaultRouter()
 router.register('products', ProductViewSet)
