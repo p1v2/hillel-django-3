@@ -18,19 +18,22 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from products.views import celery_view
-from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
-from telegram.views import telegram
+# from products.views import celery_view
+from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreInventoryViewSet, StoreViewSet
+
+# from telegram.views import telegram
 
 router = DefaultRouter()
 router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('recipes', RecipeViewSet)
+router.register('store_inventory', StoreInventoryViewSet)
+router.register('store', StoreViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('telegram/', telegram),
-    path('celery/', celery_view),
+    # path('telegram/', telegram),
+    # path('celery/', celery_view),
     path("__debug__/", include("debug_toolbar.urls")),
 ]

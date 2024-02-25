@@ -8,10 +8,24 @@ from rest_framework.response import Response
 
 from hillelDjango3.permissions import IsOwnerOrReadOnly
 from products.filters import ProductFilter
-from products.models import Product, Order, Recipe
+from products.models import Product, Order, Recipe, StoreInventory, Store
 from products.pagination import PagePerPagePagination
-from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer
+from products.serializers import ProductSerializer, OrderSerializer, ProductReadOnlySerializer
 from products.serializers.recipe import RecipeSerializer
+from products.serializers.store import StoreSerializer
+from products.serializers.storeInventory import StoreInventorySerializer
+
+
+class StoreInventoryViewSet(viewsets.ModelViewSet):
+    queryset = StoreInventory.objects.all()
+    serializer_class = StoreInventorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class StoreViewSet(viewsets.ModelViewSet):
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -49,7 +63,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().prefetch_related(
-            'order_products', 'order_products__product')
+        'order_products', 'order_products__product')
     serializer_class = OrderSerializer
 
     def get_queryset(self):

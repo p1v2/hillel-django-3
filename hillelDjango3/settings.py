@@ -94,6 +94,7 @@ DATABASES = {
         'USER': os.environ["DB_USER"],
         'PASSWORD': os.environ["DB_PASSWORD"],
         'HOST': os.environ["DB_HOST"],
+        'PORT': os.environ["DB_PORT"],
     }
 }
 
@@ -180,11 +181,11 @@ REST_FRAMEWORK = {
 }
 
 # Celery settings
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
-
-CELERY_BEAT_SCHEDULE = {
-    'hello_world': {
-        'task': 'products.tasks.hello_world_task',
-        'schedule': 10.0,
-    }
-}
+# CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+#
+# CELERY_BEAT_SCHEDULE = {
+#     'hello_world': {
+#         'task': 'products.tasks.hello_world_task',
+#         'schedule': 10.0,
+#     }
+# }
