@@ -11,6 +11,7 @@ class StoreInventory(models.Model):
 
     class Meta:
         verbose_name_plural = "Store Inventories"
+
     def amount(self):
         return float(self.inventory.price) * self.quantity
 
