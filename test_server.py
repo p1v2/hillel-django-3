@@ -1,7 +1,7 @@
 import requests
 
 def test_products_get():
-    response = requests.get('http://localhost:8000/api/products/')
+    response = requests.get('http://localhost:8000/api/products')
 
     print(response.json())
     print(response.status_code)

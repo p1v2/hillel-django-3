@@ -7,10 +7,10 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from hillelDjango3.permissions import IsOwnerOrReadOnly
-from products.filters import ProductFilter
-from products.models import Product, Order, Recipe
+from products.filters import ProductFilter, StoreFilter
+from products.models import Product, Order, Recipe, Store
 from products.pagination import PagePerPagePagination
-from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer
+from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer, StoreSerializer, StoreReadOnlySerializer
 from products.serializers.recipe import RecipeSerializer
 
 
@@ -63,3 +63,23 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [IsOwnerOrReadOnly]
+
+
+class StoreViewSet(viewsets.ModelViewSet):
+    queryset = Store.objects.all().prefetch_related(
+            'store_inventory', 'store_inventory__inventory')
+    #serializer_class = StoreSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+    filterset_class = StoreFilter
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+
+    pagination_class = CursorPagination
+
+    ordering_fields = ['employees_num', 'square']
+    ordering = ['square']
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return StoreReadOnlySerializer
+        return StoreSerializer
+

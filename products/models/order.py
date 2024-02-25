@@ -25,5 +25,5 @@ class Order(models.Model):
     def total_price(self):
         total_price = 0
         for order_product in self.order_products.all():
-            total_price += order_product.price
+            total_price += order_product.price()
         return total_price

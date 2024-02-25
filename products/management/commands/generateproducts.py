@@ -2,7 +2,6 @@ import random
 from datetime import timedelta, datetime
 
 from django.core.management import BaseCommand
-
 from products.factories import ProductFactory, TagFactory, CategoryFactory
 from products.models import Product
 

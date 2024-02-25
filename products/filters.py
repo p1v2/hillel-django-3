@@ -1,6 +1,6 @@
 import django_filters
 
-from products.models import Product
+from products.models import Product, Store
 
 
 class ProductFilter(django_filters.FilterSet):
@@ -18,4 +18,18 @@ class ProductFilter(django_filters.FilterSet):
             'category': ['exact'],
             'tags': ['exact'],
             'created_at': ['date__gt', 'date__lt'],
+        }
+
+class StoreFilter(django_filters.FilterSet):
+    min_employees = django_filters.NumberFilter(field_name='employees_num', lookup_expr='gte')
+    max_square = django_filters.CharFilter(field_name='square', lookup_expr='gte')
+
+    class Meta:
+        model = Store
+        fields = {
+            # contains, i - case insensitive
+            'name': ['icontains'],
+            # less than, greater than
+            'square': ['lt', 'gt'],
+            'employees_num': ['lt', 'gt'],
         }

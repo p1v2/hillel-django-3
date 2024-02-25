@@ -28,7 +28,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -180,11 +180,11 @@ REST_FRAMEWORK = {
 }
 
 # Celery settings
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
-
-CELERY_BEAT_SCHEDULE = {
-    'hello_world': {
-        'task': 'products.tasks.hello_world_task',
-        'schedule': 10.0,
-    }
-}
+# CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+#
+# CELERY_BEAT_SCHEDULE = {
+#     'hello_world': {
+#         'task': 'products.tasks.hello_world_task',
+#         'schedule': 10.0,
+#     }
+# }
