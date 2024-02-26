@@ -7,14 +7,14 @@ from django.db.models import Sum
 from products.models import OrderProduct
 from products.models.order import Order
 from telegram.client import send_message
+from hillelDjango3.celery import app
 
-
-@shared_task
-def hello_world_task():
+@app.task(bind=True)
+def hello_world_task(self):
     print('Hello, World!')
 
-@shared_task
-def order_send_telegram_message(order_id):
+@app.task(bind=True)
+def order_send_telegram_message(self, order_id):
     print('Sending telegram message')
     order = Order.objects.get(uuid=order_id)
 
@@ -46,18 +46,18 @@ def order_send_telegram_message(order_id):
 #     ).order_by('-total_quantity')
 #     # print(top_products[:3])
 #     return top_products
-@shared_task
-def top_selling_products_task():
+@app.task(bind=True)
+def top_selling_products_task(self):
     order_products = OrderProduct.objects.filter(created_at__date=datetime.date.today()).all()
     top_products = order_products.values('order_products__product__title').annotate(
         total_quantity=Sum('order_products__quantity')
     ).order_by('-total_quantity')[:3]
     return list(top_products)
 
-@shared_task
-def today_count_orders():
-    day = datetime.date.today() - datetime.timedelta(days=2)
+@app.task(bind=True)
+def today_count_orders(self):
+    day = datetime.date.today() - datetime.timedelta(days=3)
     orders = Order.objects.filter(created_at__date=day).count()
     # print(f'Orders created yesterday: {orders}')
-    return orders.get()
-    # print(f'Orders created yesterday: {orders}')
+    # return orders.get()
+    print(f'Orders created yesterday: {orders}')

@@ -72,6 +72,13 @@ class StoreViewSet(viewsets.ModelViewSet):
     serializer_class = StoreSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    @action(detail=True, methods=['get'])
+    def inventory(self, request, pk):
+        store = self.get_object()
+        inventory = store.storeinventory_set.all()
+
+        return Response(StoreInventorySerializer(inventory, many=True).data)
+
 
 class StoreInventoryViewSet(viewsets.ModelViewSet):
     queryset = StoreInventory.objects.all()

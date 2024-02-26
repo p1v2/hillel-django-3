@@ -192,8 +192,8 @@ CELERY_BEAT_SCHEDULE = {
     },
     'today_count_orders': {
         'task': 'products.tasks.today_count_orders',
-        'schedule': 5.0,
-        # 'schedule': crontab(hour='10', minute='0'),
+        # 'schedule': 5.0,
+        'schedule': crontab(hour='10', minute='0'),
     },
     'top_selling_products': {
         'task': 'products.tasks.top_selling_products',
