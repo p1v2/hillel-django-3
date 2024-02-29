@@ -18,7 +18,7 @@ def telegram(request):
 
     telegram_text = f"{name}: {text}"
 
-    send_message(192484569, telegram_text)
+    send_message(6740309896, telegram_text)
 
     # Some comment
 

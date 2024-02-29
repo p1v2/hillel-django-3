@@ -63,23 +63,23 @@ def today_count_orders_view(request):
 
 
 
-# def top_selling_products_view(request):
-#     if request.method == 'GET':
-#         # Вызов задачи для получения топ-продуктов
-#         top_products = top_selling_products.delay()
-#
-#         # Возвращаем JSON ответ с топ-продуктами
-#         return JsonResponse({'top_products': top_products.get()})
-
 def top_selling_products_view(request):
     if request.method == 'GET':
+        # Вызов задачи для получения топ-продуктов
+        top_products = top_selling_products_task.delay()
 
-        task_result = top_selling_products_task.AsyncResult(task_id)
+        # Возвращаем JSON ответ с топ-продуктами
+        return JsonResponse({'top_products': top_products.get()})
 
-
-        if task_result.ready():
-            top_products = task_result.get()
-            return JsonResponse({'top_products': top_products})
-        else:
-
-            return JsonResponse({'status': 'Task is still in progress'})
+# def top_selling_products_view(request):
+#     if request.method == 'GET':
+#
+#         task_result = top_selling_products_task.AsyncResult(task_id)
+#
+#
+#         if task_result.ready():
+#             top_products = task_result.get()
+#             return JsonResponse({'top_products': top_products})
+#         else:
+#
+#             return JsonResponse({'status': 'Task is still in progress'})
