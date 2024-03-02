@@ -1,13 +1,1 @@
 
-*** Modified files in JOE when it aborted on Sat Mar  2 21:31:54 2024
-*** JOE was aborted by signal 1
-
-*** File '/home/pashkovuch/PycharmProjects/hillel-django-3/.git/COMMIT_EDITMSG'
-
-# Please enter the commit message for your changes. Lines starting
-# with '#' will be ignored, and an empty message aborts the commit.
-#
-# On branch HW8
-# Changes to be committed:
-#	modified:   my_shit
-#
