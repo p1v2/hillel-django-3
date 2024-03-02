@@ -4,7 +4,7 @@
     2)Закомітити зміни (В лапках коментар до коміту):
     git commit -m "ДЗ8"
     3)Вказати спосіб/шлях через ТОКЕН:
-    git remote set-url origin https://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:@github.com/dmitriypaskov/hillel-django-3.git
+    git remote set-url origin https://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:@github.com/dmitriypaskov/hillel-django-3.git
     4)Запушити зміни, останнє слово назва гілки куди пушимо:
     git push origin pashkov
 
@@ -24,4 +24,4 @@ and views/urls for them
 Юзер Гіта
 dmitriypaskov
 Токен Гіта:
-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
+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
