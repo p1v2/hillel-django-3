@@ -3,16 +3,26 @@
     git add .
     2)Закомітити зміни (В лапках коментар до коміту):
     git commit -m "ДЗ8"
-    3)Вказати спосіб/шлях через ТОКЕН:
-    git remote set-url origin https://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:@github.com/dmitriypaskov/hillel-django-3.git
-    4)Запушити зміни, останнє слово назва гілки куди пушимо:
+    3)Запушити зміни, останнє слово назва гілки куди пушимо:
     git push origin pashkov
+
+НАЛАШТУВАННЯ ТОКЕН АВТОРИЗАЦІЇ
+    Вказати спосіб/шлях через ТОКЕН:
+    git remote set-url origin https://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:@github.com/dmitriypaskov/hillel-django-3.git
+
+
 
 РАН ДЖАНГО СЕРВЕР
 python manage.py runserver
 
 СЕЛЕРІ ВОРКЕР В РЕЖИМІ БІТ
 celery -A hillelDjango3.celery worker --loglevel=info --beat
+
+Was Create
+-Models for Store and StoreInventory
+-Serializer for Store and StoreInventory
+-ViewSet for Store and StoreInventory
+-Endpoints Create and Tested
 
 Was created
 top_selling_products_task
