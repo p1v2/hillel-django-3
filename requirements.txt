@@ -1,4 +1,4 @@
-Django==5.0.1
+
 
 djangorestframework==3.14.0
 django-debug-toolbar==4.3.0
@@ -9,7 +9,7 @@ celery==5.3.6
 redis==5.0.1
 django-celery-beat==2.5.0
 Faker==23.2.0
-
+factory_boy==3.3.0
 amqp==5.2.0
 asgiref==3.7.2
 billiard==4.2.0
