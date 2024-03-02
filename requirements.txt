@@ -1,17 +1,5 @@
-Django==5.0.1
-
-djangorestframework==3.14.0
-django-debug-toolbar==4.3.0
-uuid==1.30
-django-filter==23.5
-python-dotenv==1.0.1
-celery==5.3.6
-redis==5.0.1
-django-celery-beat==2.5.0
-Faker==23.2.0
-
 amqp==5.2.0
-asgiref==3.7.2
+asgiref==3.7.2 
 billiard==4.2.0
 celery==5.3.6
 certifi==2024.2.2
@@ -29,8 +17,6 @@ django-filter==23.5
 django-timezone-field==6.1.0
 djangorestframework==3.14.0
 factory-boy==3.3.0
-
-
 Faker==23.2.0
 flower==2.0.1
 humanize==4.9.0
@@ -39,9 +25,7 @@ kombu==5.3.5
 ngrok==1.0.0
 prometheus_client==0.20.0
 prompt-toolkit==3.0.43
-wheel==0.42.0
-
-
+psycopg2==2.9.9
 python-crontab==3.0.0
 python-dateutil==2.8.2
 python-dotenv==1.0.1
@@ -57,3 +41,4 @@ uuid==1.30
 vine==5.1.0
 wcwidth==0.2.13
 wheel==0.42.0
+
