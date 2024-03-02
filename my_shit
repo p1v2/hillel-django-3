@@ -4,7 +4,7 @@
     2)Закомітити зміни (В лапках коментар до коміту):
     git commit -m "ДЗ8"
     3)Вказати спосіб/шлях через ТОКЕН:
-    https://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:@github.com/dmitriypaskov/hillel-django-3.git
+    git remote set-url origin https://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:@github.com/dmitriypaskov/hillel-django-3.git
     4)Запушити зміни, останнє слово назва гілки куди пушимо:
     git push origin pashkov
 
@@ -13,6 +13,12 @@ python manage.py runserver
 
 СЕЛЕРІ ВОРКЕР В РЕЖИМІ БІТ
 celery -A hillelDjango3.celery worker --loglevel=info --beat
+
+Was created
+top_selling_products_task
+today_count_orders_task
+and views/urls for them
+
 
 
 Юзер Гіта
