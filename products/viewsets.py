@@ -27,6 +27,13 @@ class StoreViewSet(viewsets.ModelViewSet):
     serializer_class = StoreSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    @action(detail=True, methods=['get'])
+    def inventory(self, requrest, pk):
+        store = self.get_object()
+        inventory = store.store_inventorys.all()
+
+        return Response(StoreInventorySerializer(inventory, many=True).data)
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     # select_related - for ForeignKey

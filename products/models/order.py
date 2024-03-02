@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from products.models import Product
+from telegram.client import send_message
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class Order(models.Model):
@@ -27,3 +30,14 @@ class Order(models.Model):
         for order_product in self.order_products.all():
             total_price += order_product.price
         return total_price
+
+    def __str__(self):
+        return f"{self.created_at} : {self.user.username} - {self.total_price}"
+
+
+@receiver(post_save, sender=Order)
+def send_order_telegram_message(sender, instance: Order, created, **kwargs):
+    if created:
+        chat_id = 968123153
+        text = f"New order {instance.uuid} created"
+        send_message(chat_id, text)
