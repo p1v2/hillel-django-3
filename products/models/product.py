@@ -17,6 +17,7 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name='products')
 
     orders = models.ManyToManyField('Order', through='OrderProduct')
+    product = models.ManyToManyField('Store', through='StoreInventory')
 
     # ActiveRecord
     created_at = models.DateTimeField(auto_now_add=True)
@@ -24,3 +25,4 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.price}"
+

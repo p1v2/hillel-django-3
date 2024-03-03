@@ -19,20 +19,23 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from hillelDjango3.views import registration, obtain_auth_token
-from products.views import celery_view
-from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
+from products.views import celery_view, daily_order_count_view
+from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreViewSet, StoreInventoryViewSet
 from telegram.views import telegram
 
 router = DefaultRouter()
 router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('recipes', RecipeViewSet)
+router.register('stores', StoreViewSet)
+router.register('store_inventories', StoreInventoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('telegram/', telegram),
     path('celery/', celery_view),
+    path('daily_order_count/', daily_order_count_view),
     path('api-registration/', registration),
     path('api-auth/', obtain_auth_token),
     path("__debug__/", include("debug_toolbar.urls")),
