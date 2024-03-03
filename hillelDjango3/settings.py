@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+
+import certifi
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 
@@ -26,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",") + ["0.0.0.0"]
 
 
 # Application definition
@@ -86,17 +89,23 @@ WSGI_APPLICATION = 'hillelDjango3.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        # PostgreSQL
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["DB_NAME"],
-        'USER': os.environ["DB_USER"],
-        'PASSWORD': os.environ["DB_PASSWORD"],
-        'HOST': os.environ["DB_HOST"],
-        'PORT': os.environ["DB_PORT"],
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            # PostgreSQL
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ["DB_NAME"],
+            'USER': os.environ["DB_USER"],
+            'PASSWORD': os.environ["DB_PASSWORD"],
+            'HOST': os.environ["DB_HOST"],
+        }
+    }
 
 
 # Password validation
@@ -155,10 +164,10 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-        }
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        # }
     }
 }
 
@@ -181,11 +190,25 @@ REST_FRAMEWORK = {
 }
 
 # Celery settings
-# CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
-#
-# CELERY_BEAT_SCHEDULE = {
-#     'hello_world': {
-#         'task': 'products.tasks.hello_world_task',
-#         'schedule': 10.0,
-#     }
-# }
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+
+CELERY_BEAT_SCHEDULE = {
+    'hello_world': {
+        'task': 'products.tasks.hello_world_task',
+        'schedule': 10.0,
+    }
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+
+os.environ["SSL_CERT_FILE"] = certifi.where()
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+CELERY_RESULT_BACKEND = "django-db"
