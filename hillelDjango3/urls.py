@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from products.views import celery_view, top_selling_products_view, today_count_orders_view
-from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreInventoryViewSet, StoreViewSet
+from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
 
 from telegram.views import telegram
 
@@ -27,8 +27,7 @@ router = DefaultRouter()
 router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('recipes', RecipeViewSet)
-router.register('store_inventory', StoreInventoryViewSet)
-router.register('store', StoreViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
