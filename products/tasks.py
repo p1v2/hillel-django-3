@@ -1,6 +1,8 @@
 from celery import shared_task
 from django.core.mail import send_mail, EmailMessage
 from rest_framework.authtoken.admin import User
+from datetime import datetime, timedelta
+from django.db.models import Count
 
 from google_sheets.api import write_to_sheet
 from products.models import Product
@@ -88,3 +90,24 @@ def send_welcome_email(user_id):
     # )
     # email_message.attach('hello.txt', txt_file_content, 'text/plain')
     # email_message.send()
+
+
+@shared_task
+def daily_order_count():
+    # Get the start and end date for the last day
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=1)
+
+    # Count orders created during the last day
+    orders_count = Order.objects.filter(created_at__range=(start_date, end_date)).count()
+
+    top_products = Order.objects.filter(created_at__range=(start_date, end_date)) \
+                       .values('product_id') \
+                       .annotate(count=Count('product_id')) \
+                       .order_by('-count')[:3]
+
+    # Log the statistics
+    print(f"Orders created during the last day: {orders_count}")
+    print("Top 3 ordered products:")
+    for product in top_products:
+        print(f"Product ID: {product['product_id']}, Count: {product['count']}")

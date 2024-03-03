@@ -2,6 +2,7 @@ from django.http import JsonResponse, HttpResponse
 
 from products.models import Product
 from products.tasks import hello_world_task
+from products.tasks import daily_order_count
 
 
 # Create your views here.
@@ -24,5 +25,11 @@ def products_view(request, *args, **kwargs):
 
 def celery_view(request, *args, **kwargs):
     hello_world_task.delay()
+
+    return HttpResponse("OK")
+
+
+def daily_order_count_view(request, *args, **kwargs):
+    daily_order_count.delay()
 
     return HttpResponse("OK")
