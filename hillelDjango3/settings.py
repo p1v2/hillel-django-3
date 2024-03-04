@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'django_filters',
     "django_celery_beat",
+    'django_celery_results',
     # Local apps
     'products',
 ]
@@ -200,3 +201,6 @@ EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
+
+
+CELERY_RESULT_BACKEND = "django-db"

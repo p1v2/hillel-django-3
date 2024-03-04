@@ -88,3 +88,5 @@ def send_welcome_email(user_id):
     # )
     # email_message.attach('hello.txt', txt_file_content, 'text/plain')
     # email_message.send()
+
+    return "LOL!"
