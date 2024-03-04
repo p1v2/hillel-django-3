@@ -58,6 +58,6 @@ def top_selling_products_task(self):
 def today_count_orders(self):
     day = datetime.date.today() - datetime.timedelta(days=0)
     orders = Order.objects.filter(created_at__date=day).count()
-    # print(f'Orders created yesterday: {orders}')
-    return orders
-    # print(f'Orders created yesterday: {orders}')
+    print(f'Orders created yesterday: {orders.get()}')
+    # return orders
+    # print(f'Orders created yesterday: {orders}') -

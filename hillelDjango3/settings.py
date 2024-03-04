@@ -188,7 +188,7 @@ CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
 CELERY_BEAT_SCHEDULE = {
     'hello_world': {
         'task': 'products.tasks.hello_world_task',
-        'schedule': 5.0,
+        # 'schedule': 5.0,
     },
     'today_count_orders': {
         'task': 'products.tasks.today_count_orders',
