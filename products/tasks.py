@@ -1,3 +1,4 @@
+
 import datetime
 
 from celery import shared_task
@@ -5,6 +6,14 @@ import requests
 from django.db.models import Sum
 
 from products.models import OrderProduct
+
+from celery import shared_task
+from django.core.mail import send_mail, EmailMessage
+from rest_framework.authtoken.admin import User
+
+from google_sheets.api import write_to_sheet
+from products.models import Product
+
 from products.models.order import Order
 from telegram.client import send_message
 from hillelDjango3.celery import app
@@ -29,23 +38,6 @@ def order_send_telegram_message(self, order_id):
     print('Telegram message sent')
 
 
-# Celery task in  project that runs daily at 10 . Count how many orders were created during the day.
-# @shared_task
-# def today_count_orders():
-#     # day = datetime.date.today() - datetime.timedelta(days=1)
-#     # orders = Order.objects.filter(create_at__date=day).count()
-#     # orders_today = Order.objects.filter(create_at__date=datetime.date.today()).count()
-#     orders_today = Order.objects.filter(create_at__date=datetime.date.today()).all()
-#     print(f'Orders created yesterday: {orders_today}')
-
-# @shared_task
-# def top_selling_products():
-#     order_today = Order.objects.filter(created_at__date=datetime.date.today()).all()
-#     top_products = order_today.values('order_products__product__title').annotate(
-#         total_quantity=Sum('order_products__quantity')
-#     ).order_by('-total_quantity')
-#     # print(top_products[:3])
-#     return top_products
 @app.task(bind=True)
 def top_selling_products_task(self):
     order_products = Order.objects.filter(created_at__date=datetime.date.today()).all()
@@ -58,6 +50,70 @@ def top_selling_products_task(self):
 def today_count_orders(self):
     day = datetime.date.today() - datetime.timedelta(days=0)
     orders = Order.objects.filter(created_at__date=day).count()
-    # print(f'Orders created yesterday: {orders}')
-    return orders
-    # print(f'Orders created yesterday: {orders}')
+    print(f'Orders created yesterday: {orders.get()}')
+    # return orders
+    # print(f'Orders created yesterday: {orders}') -
+
+@shared_task
+def write_google_sheet_products_report():
+    products = Product.objects.all()
+
+    # write to google sheet
+    products_data = []
+
+    for product in products:
+        products_data.append([product.title, float(product.price), product.description])
+
+    # write to google sheet
+    write_to_sheet("A:C", products_data)
+
+
+@shared_task
+def send_welcome_email(user_id):
+    user = User.objects.get(id=user_id)
+
+    # Send text email
+    send_mail(
+        'Welcome to our service',
+        f'Hello, {user.username}! Welcome to our service!',
+        'dy5780356@gmail.com',
+        ['dima.ermolenko@gmail.com'], #'vitalii@vitalii.tech', from products.tasks import send_welcome_email
+        fail_silently=False,
+    )
+    #
+    # # Send html email
+    # send_mail(
+    #     'Welcome to our service',
+    #     f'Hello, {user.username}! Welcome to our service!',
+    #     "dy5780356@gmail.com",
+    #     ['vitalii@vitalii.tech'],
+    #     html_message=f'<h1>Hello, {user.username}!</h1><p>Welcome to our service!</p>',
+    #     fail_silently=False,
+    # )
+    #
+    # # Send html with attachment
+    # email_message = EmailMessage(
+    #     'Welcome to our service',
+    #     f'Hello, {user.username}! Welcome to our service!',
+    #     "dy5780356@gmail.com",
+    #     ['vitalii@vitalii.tech'],
+    # )
+    # # attach file
+    # email_message.attach_file('img.png')
+    # email_message.attach_file("img2.jpg")
+    # email_message.send()
+    #
+    # # Send html with generated attachemnts
+    # txt_file_content = 'Hello, World!'
+    #
+    # email_message = EmailMessage(
+    #     'Welcome to our service',
+    #     f'Hello, {user.username}! Welcome to our service!',
+    #     "pavliuk96@gmail.com",
+    #     ['vitalii@vitalii.tech'],
+    # )
+    # email_message.attach('hello.txt', txt_file_content, 'text/plain')
+    # email_message.send()
+    #
+    # return "LOL!"
+
