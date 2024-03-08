@@ -12,7 +12,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+<<<<<<< HEAD
 from celery.schedules import crontab
+=======
+import certifi
+>>>>>>> main
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -30,7 +34,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",") + ["0.0.0.0"]
 
 
 # Application definition
@@ -49,6 +53,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'django_filters',
     "django_celery_beat",
+    'django_celery_results',
     # Local apps
     'products',
 ]
@@ -200,3 +205,16 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(hour='10', minute='0'),
     }
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
+
+os.environ["SSL_CERT_FILE"] = certifi.where()
+
+
+CELERY_RESULT_BACKEND = "django-db"

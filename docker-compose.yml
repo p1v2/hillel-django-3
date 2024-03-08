@@ -58,4 +58,8 @@ services:
         - redis
     volumes:
         - .:/app
+<<<<<<< HEAD
     restart: always
+=======
+    restart: always
+>>>>>>> main

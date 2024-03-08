@@ -18,8 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
+<<<<<<< HEAD
 from products.views import celery_view, top_selling_products_view, today_count_orders_view
 from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet, StoreViewSet, StoreInventoryViewSet
+=======
+from hillelDjango3.views import registration, obtain_auth_token
+from products.views import celery_view, products_view
+from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
+>>>>>>> main
 from telegram.views import telegram
 
 
@@ -35,7 +41,15 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('telegram/', telegram),
     path('celery/', celery_view),
+<<<<<<< HEAD
     path("today_count_orders/", today_count_orders_view),
     path("top_selling_products/", top_selling_products_view),
+=======
+    path('api-registration/', registration),
+    path('api-auth/', obtain_auth_token),
+    path('products', products_view),
+>>>>>>> main
     path("__debug__/", include("debug_toolbar.urls")),
 ]
+
+746076
