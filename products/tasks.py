@@ -50,33 +50,33 @@ def send_welcome_email(user_id):
     send_mail(
         'Welcome to our service',
         f'Hello, {user.username}! Welcome to our service!',
-        'pavliuk96@gmail.com',
-        ['vitalii@vitalii.tech'],
+        'dy5780356@gmail.com',
+        ['dima.ermolenko@gmail.com'], #'vitalii@vitalii.tech', from products.tasks import send_welcome_email
         fail_silently=False,
     )
-
-    # Send html email
+    #
+    # # Send html email
     # send_mail(
     #     'Welcome to our service',
     #     f'Hello, {user.username}! Welcome to our service!',
-    #     "pavliuk96@gmail.com",
+    #     "dy5780356@gmail.com",
     #     ['vitalii@vitalii.tech'],
     #     html_message=f'<h1>Hello, {user.username}!</h1><p>Welcome to our service!</p>',
     #     fail_silently=False,
     # )
-
-    # Send html with attachment
+    #
+    # # Send html with attachment
     # email_message = EmailMessage(
     #     'Welcome to our service',
     #     f'Hello, {user.username}! Welcome to our service!',
-    #     "pavliuk96@gmail.com",
+    #     "dy5780356@gmail.com",
     #     ['vitalii@vitalii.tech'],
     # )
     # # attach file
     # email_message.attach_file('img.png')
     # email_message.attach_file("img2.jpg")
     # email_message.send()
-
+    #
     # # Send html with generated attachemnts
     # txt_file_content = 'Hello, World!'
     #
@@ -88,5 +88,5 @@ def send_welcome_email(user_id):
     # )
     # email_message.attach('hello.txt', txt_file_content, 'text/plain')
     # email_message.send()
-
-    return "LOL!"
+    #
+    # return "LOL!"
