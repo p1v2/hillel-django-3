@@ -17,10 +17,10 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name='products')
 
     orders = models.ManyToManyField('Order', through='OrderProduct')
+    stores = models.ManyToManyField('Store', through='StoreInventory')
 
-    # ActiveRecord
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.title} - {self.price}"

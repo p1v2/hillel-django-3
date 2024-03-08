@@ -35,5 +35,5 @@ class OrderSerializer(serializers.ModelSerializer):
             # OrderProduct.objects.create(order=order, product_id=1, quantity=2)
             # OrderProduct.objects.create(order=order, **order_product)
             order.order_products.create(**order_product)
-
+        # add user to order
         return order

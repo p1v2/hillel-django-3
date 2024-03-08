@@ -1,0 +1,10 @@
+Django>=3.2
+psycopg2-binary==2.9.9
+djangorestframework
+django-debug-toolbar==4.3.0
+uuid==1.30
+django-filter==23.5
+python-dotenv==1.0.1
+celery==5.3.6
+redis==5.0.1
+django-celery-beat==2.5.0

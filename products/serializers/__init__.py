@@ -4,5 +4,5 @@ from .order import OrderSerializer
 __all__ = [
     'ProductSerializer',
     'ProductReadOnlySerializer',
-    'OrderSerializer'
+    'OrderSerializer',
 ]

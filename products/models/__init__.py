@@ -1,5 +1,7 @@
 from .product import Product
 from .category import Category
+from .store import Store
+from .store_inventory import StoreInventory
 from .tag import Tag
 from .order_product import OrderProduct
 from .order import Order
@@ -14,4 +16,6 @@ __all__ = [
     'OrderProduct',
     'Order',
     'Recipe',
+    'StoreInventory',
+    'Store',
 ]

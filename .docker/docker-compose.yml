@@ -1,0 +1,64 @@
+#version: '3'
+#
+#services:
+#  app:
+#    build: .
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - .:/app
+#    environment:
+#      - DEBUG=True
+#      - DJANGO_SETTINGS_MODULE=myproject.settings
+#    depends_on:
+#      - db
+#      - redis
+#
+#  db:
+#    image: "postgres:14.2"
+#    environment:
+#      - POSTGRES_PASSWORD=mypassword
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_DB=myprojectdb
+#
+#  redis:
+#    image: "redis:6.2.6"
+#
+#  celery:
+#    build: .
+#    command: celery -A hillelDjango3 worker -l info
+#    volumes:
+#      - .:/app
+#    depends_on:
+#      - redis
+
+version: '3'
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile.flower
+    ports:
+      - "5555:5555"
+    depends_on:
+      - celery
+
+volumes:
+  redis_data:
