@@ -212,5 +212,6 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 CELERY_RESULT_BACKEND = "django-db"
