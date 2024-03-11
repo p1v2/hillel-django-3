@@ -53,8 +53,8 @@ def today_count_orders_view(request):
     result = today_count_orders.delay()
     # orders_count = result.get() if result.ready() else 'Task not yet complete'
     # print(result.get(timeout=10))
-    return HttpResponse(f'Orders created today: {result}')
-    # return HttpResponse({'today_orders_count': result})
+    return HttpResponse(f'Orders created today: {result.get()}')
+
 
 
 
