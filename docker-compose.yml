@@ -15,7 +15,7 @@ services:
       context: .
     image: hillel_django-web
     ports:
-      - "8001:8000"
+      - "8002:8000"
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
     environment:
         - DB_HOST=db
@@ -58,6 +58,6 @@ services:
         - redis
     volumes:
         - .:/app
-<<<<<<< HEAD
+
     restart: always
 
