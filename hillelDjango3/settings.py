@@ -14,6 +14,7 @@ from pathlib import Path
 
 import certifi
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 
@@ -91,16 +92,23 @@ WSGI_APPLICATION = 'hillelDjango3.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        # PostgreSQL
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["DB_NAME"],
-        'USER': os.environ["DB_USER"],
-        'PASSWORD': os.environ["DB_PASSWORD"],
-        'HOST': os.environ["DB_HOST"],
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            # PostgreSQL
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ["DB_NAME"],
+            'USER': os.environ["DB_USER"],
+            'PASSWORD': os.environ["DB_PASSWORD"],
+            'HOST': os.environ["DB_HOST"],
+        }
+    }
 
 
 # Password validation
