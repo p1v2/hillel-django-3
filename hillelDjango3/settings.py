@@ -63,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'hillelDjango3.urls'
@@ -157,10 +159,10 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-        }
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        # }
     }
 }
 
