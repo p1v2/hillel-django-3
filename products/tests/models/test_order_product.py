@@ -15,8 +15,9 @@ class ProductTestCase(TestCase):
 
 
 @patch('products.signals.after_order_initialized')
+@patch('products.signals.user_saved')
 class OrderProductTestCase(TestCase):
-    def test_price(self, after_order_initialized_mock):
+    def test_price(self, *args):
         product = Product.objects.create(title='A product', price=40.1, summary='A summary')
         order = Order.objects.create(user=User.objects.create(username='test'))
 
