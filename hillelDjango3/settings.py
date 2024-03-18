@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'hillelDjango3.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
-USE_SQLITE = os.environ.get("USE_SQLITE", "False") == "True"
+USE_SQLITE = os.environ.get("USE_SQLITE", "False").lower() == "true"
 
 if DATABASE_URL:
     DATABASES = {
