@@ -14,8 +14,8 @@ class ProductTestCase(TestCase):
         self.assertEqual(str(product), 'A product - 40')
 
 
-@patch('products.signals.after_order_initialized')
-@patch('products.signals.user_saved')
+@patch('products.signals.order_send_telegram_message')
+@patch('products.signals.send_welcome_email')
 class OrderProductTestCase(TestCase):
     def test_price(self, *args):
         product = Product.objects.create(title='A product', price=40.1, summary='A summary')
