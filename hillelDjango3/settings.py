@@ -93,10 +93,18 @@ WSGI_APPLICATION = 'hillelDjango3.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
+USE_SQLITE = os.environ.get("USE_SQLITE", "False") == "True"
 
 if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.config(default=DATABASE_URL)
+    }
+elif USE_SQLITE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
 else:
     DATABASES = {
