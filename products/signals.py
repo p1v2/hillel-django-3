@@ -52,7 +52,7 @@ def after_order_initialized(sender, instance, **kwargs):
     send_message(chat_id, text)
 
 
-# @receiver(post_save, sender=User)
-# def user_saved(sender, instance, created, **kwargs):
-#     if created:
-#         send_welcome_email.delay(instance.id)
+@receiver(post_save, sender=User)
+def user_saved(sender, instance, created, **kwargs):
+    if created:
+        send_welcome_email.delay(instance.id)

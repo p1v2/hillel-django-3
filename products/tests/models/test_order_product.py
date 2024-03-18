@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -12,8 +14,9 @@ class ProductTestCase(TestCase):
         self.assertEqual(str(product), 'A product - 40')
 
 
+@patch('products.signals.after_order_initialized')
 class OrderProductTestCase(TestCase):
-    def test_price(self):
+    def test_price(self, after_order_initialized_mock):
         product = Product.objects.create(title='A product', price=40.1, summary='A summary')
         order = Order.objects.create(user=User.objects.create(username='test'))
 
