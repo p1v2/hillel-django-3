@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'django_filters',
     "django_celery_beat",
-    'django_celery_results',
     # Local apps
     'products',
 ]
@@ -64,8 +63,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'hillelDjango3.urls'

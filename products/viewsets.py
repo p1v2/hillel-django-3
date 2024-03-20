@@ -10,7 +10,7 @@ from hillelDjango3.permissions import IsOwnerOrReadOnly
 from products.filters import ProductFilter
 from products.models import Product, Order, Recipe
 from products.pagination import PagePerPagePagination
-from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer
+from products.serializers import ProductSerializer, OrderSerializer, ProductReadOnlySerializer
 from products.serializers.recipe import RecipeSerializer
 
 
@@ -49,7 +49,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().prefetch_related(
-            'order_products', 'order_products__product')
+        'order_products', 'order_products__product')
     serializer_class = OrderSerializer
 
     def get_queryset(self):
