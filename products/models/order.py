@@ -6,11 +6,15 @@ from products.models import Product
 
 
 class Order(models.Model):
-    uuid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    uuid = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4)
     # on_delete=models.CASCADE means that if the user is deleted, all of their orders will be deleted
     # on_delete=models.SET_NULL means that if the user is deleted, the order will still exist, but the user will be set to NULL
     # on_delete=models.PROTECT means that if the user is deleted, the order will still exist, but the user will be set to NULL
-    # on_delete=models.SET_DEFAULT means that if the user is deleted, the order will still exist, but the user will be set to the default user
+    # on_delete=models.SET_DEFAULT means that if the user is deleted, the
+    # order will still exist, but the user will be set to the default user
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     products = models.ManyToManyField(Product, through='OrderProduct')

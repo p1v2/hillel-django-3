@@ -1,5 +1,3 @@
-from gevent import sleep
-
 def application(environ, start_response):
     """Simple WSGI application"""
     status = '200 OK'

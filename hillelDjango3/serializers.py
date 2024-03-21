@@ -39,7 +39,8 @@ class ObtainAuthTokenSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Incorrect password')
 
         else:
-            raise serializers.ValidationError('Must include "username" and "password"')
+            raise serializers.ValidationError(
+                'Must include "username" and "password"')
 
         attrs['user'] = user
         token, _ = Token.objects.get_or_create(user=user)

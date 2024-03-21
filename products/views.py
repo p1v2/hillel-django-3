@@ -28,6 +28,7 @@ def products_view(request, *args, **kwargs):
 
     return render(request, 'products.html', {'products': products})
 
+
 def celery_view(request, *args, **kwargs):
     hello_world_task.delay()
 

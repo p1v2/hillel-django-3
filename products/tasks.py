@@ -12,6 +12,7 @@ from telegram.client import send_message
 def hello_world_task():
     print('Hello, World!')
 
+
 @shared_task
 def order_send_telegram_message(order_id):
     print('Sending telegram message')
@@ -36,7 +37,8 @@ def write_google_sheet_products_report():
     products_data = []
 
     for product in products:
-        products_data.append([product.title, float(product.price), product.description])
+        products_data.append(
+            [product.title, float(product.price), product.description])
 
     # write to google sheet
     write_to_sheet("A:C", products_data)

@@ -13,7 +13,8 @@ def get_client():
         "https://www.googleapis.com/auth/drive.file",
         "https://www.googleapis.com/auth/drive"
     ]
-    credentials = Credentials.from_service_account_file(CREDENTIALS_PATH, scopes=scopes)
+    credentials = Credentials.from_service_account_file(
+        CREDENTIALS_PATH, scopes=scopes)
 
     client = gspread.authorize(credentials)
 
