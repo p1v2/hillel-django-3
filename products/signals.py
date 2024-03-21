@@ -44,12 +44,12 @@ m2m_changed.connect(products_tags_change, sender=Order.products.through)
 
 # post_init
 # pre_init
-@receiver(post_init, sender=Order)
-def after_order_initialized(sender, instance, **kwargs):
-    print('Order initialized')
-    chat_id = 192484569
-    text = f"Order {instance.uuid} initialized"
-    send_message(chat_id, text)
+# @receiver(post_init, sender=Order)
+# def after_order_initialized(sender, instance, **kwargs):
+#     print('Order initialized')
+#     chat_id = 192484569
+#     text = f"Order {instance.uuid} initialized"
+#     send_message(chat_id, text)
 
 
 @receiver(post_save, sender=User)

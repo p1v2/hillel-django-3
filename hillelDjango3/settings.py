@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_filters',
     "django_celery_beat",
     'django_celery_results',
+    'drf_yasg',
     # Local apps
     'products',
 ]
