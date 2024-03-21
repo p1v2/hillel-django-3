@@ -15,7 +15,7 @@ class IntegrationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         # self.assertEqual(response.json()['results'], [{'title': 'A product', 'price': 40, 'summary': 'A summary'}])
 
-        self.assertEqual(response.json()['results'][0]['title'], 'A product')
+        self.assertEqual(response.json()['results'][0]['title'], 'BREAK!')
         self.assertEqual(response.json()['results'][0]['price'], 40)
         self.assertEqual(response.json()['results'][0]['summary'], 'A summary')
 
