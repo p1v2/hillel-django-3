@@ -18,7 +18,7 @@ class ProductTestCase(TestCase):
 @patch('products.signals.order_send_telegram_message')
 @patch('products.signals.send_welcome_email')
 class OrderProductTestCase(TestCase):
-    def test_price(self, *args):
+    def test_price(self, send_welcome_email, order_send_telegram_message):
         product = Product.objects.create(
             title='A product', price=40.1, summary='A summary')
         order = Order.objects.create(user=User.objects.create(username='test'))
