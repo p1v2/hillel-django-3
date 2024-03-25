@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "django_celery_beat",
     'django_celery_results',
     'drf_yasg',
+    "graphene_django",
     # Local apps
     'products',
 ]
@@ -224,3 +225,7 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 CELERY_RESULT_BACKEND = "django-db"
+
+GRAPHENE = {
+    "SCHEMA": "hillelDjango3.schema.schema"
+}
