@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_filters',
     "django_celery_beat",
     'django_celery_results',
+    "graphene_django",
     # Local apps
     'products',
 ]

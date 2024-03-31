@@ -14,8 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
+from graphene_django.views import GraphQLView
+from .schema import schema
 from rest_framework.routers import DefaultRouter
 
 
@@ -50,5 +54,11 @@ urlpatterns = [
     path('products', products_view),
 
     path("__debug__/", include("debug_toolbar.urls")),
+
+    path("graphql", GraphQLView.as_view(graphiql=True, schema=schema)),
+
+    # path("", TemplateView.as_view(template_name="index.html")),
+    # path("accounts/", include("allauth.urls")),
+    # path("logout", LogoutView.as_view()),
 ]
 
