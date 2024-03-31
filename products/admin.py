@@ -10,3 +10,4 @@ admin.site.register(Order)
 admin.site.register(OrderProduct)
 admin.site.register(StoreInventory)
 admin.site.register(Store)
+

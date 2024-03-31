@@ -13,4 +13,5 @@ class OrderProduct(models.Model):
         return float(self.product.price) * self.quantity
 
     def __str__(self):
-        return f"{self.quantity} of {self.product.title}"
+        # products_list = [str(product) for product in self.order.order_products.all()]
+        return f"{self.order} "

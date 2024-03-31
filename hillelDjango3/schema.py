@@ -1,7 +1,12 @@
 import graphene
 import graphene_django
+from django.db import transaction
+from graphene import Field
+from rest_framework.authtoken.admin import User
+from graphene import Mutation, Field, List, String
+from graphene_django.types import DjangoObjectType
 
-from products.models import Product, Order, Category, Tag
+from products.models import Product, Order, Category, Tag, OrderProduct
 
 
 class CategoryObjectType(graphene_django.DjangoObjectType):
@@ -30,7 +35,7 @@ class PaginatedProductObjectType(graphene.ObjectType):
 class OrderObjectType(graphene_django.DjangoObjectType):
     class Meta:
         model = Order
-        fields = ['uuid']
+        fields = ['uuid', 'products']
 
 
 class Query(graphene.ObjectType):
@@ -132,10 +137,69 @@ class UpdateProductMutation(graphene.Mutation):
             return UpdateProductMutation(product=None, error=str(e))
 
 
+
+class CreateOrderMutation(Mutation):
+    '''
+    mutation {
+      createOrder(userId: 1, productIds: [8, 88, 888]) {
+        order {
+          uuid
+          products {
+            id
+            title
+            price
+
+          }
+        }
+        error
+        userErrors
+      }
+    }
+    '''
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        product_ids = graphene.List(graphene.ID, required=True)
+
+    order = Field(OrderObjectType)
+    user_errors = List(String)
+    error = String()
+
+    @transaction.atomic  # Забезпечує цілісність даних
+    def mutate(self, info, user_id, product_ids):
+        try:
+            user = User.objects.get(pk=user_id)
+            products = Product.objects.filter(pk__in=product_ids)
+
+            if len(products) != len(product_ids):
+                # перевірка на присутність ID товарів
+                missing_product_ids = []
+                for product_id in product_ids:
+                    try:
+                        Product.objects.get(pk=product_id)
+                    except Product.DoesNotExist:
+                        missing_product_ids.append(product_id)
+                if missing_product_ids:
+                    raise Exception(
+                        f"Товар с ID {', '.join(str(product_id) for product_id in missing_product_ids)} не знайдені.")
+
+            with transaction.atomic():  # Вкладена транзакція для узгодженості даних
+                order = Order.objects.create(user=user)
+                for product in products:
+                    OrderProduct.objects.create(order=order, product=product)
+
+            return CreateOrderMutation(order=order)
+        except User.DoesNotExist as e:
+            return CreateOrderMutation(user_errors=["Хибний ID користувача"], error=str(e))
+        except Exception as e:
+            return CreateOrderMutation(error=str(e))
+
+
 class Mutation(graphene.ObjectType):
     create_product = CreateProductMutation.Field()
     update_product = UpdateProductMutation.Field()
     delete_product = graphene.Boolean(id=graphene.ID(required=True))
+
+    create_order = CreateOrderMutation.Field()
 
     def resolve_delete_product(self, info, id):
         try:
@@ -143,6 +207,10 @@ class Mutation(graphene.ObjectType):
             return True
         except Product.DoesNotExist:
             return False
+
+    def resolve_create_order(self, info, user_id, product_ids):
+
+        return CreateOrderMutation(user_id=user_id, product_ids=product_ids)
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
