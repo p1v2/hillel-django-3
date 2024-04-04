@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.db.models.signals import post_save, pre_save, post_delete, m2m_changed, post_init
 from django.dispatch import receiver
 from products.tasks import order_send_telegram_message, send_welcome_email
@@ -56,3 +57,13 @@ m2m_changed.connect(products_tags_change, sender=Order.products.through)
 def user_saved(sender, instance, created, **kwargs):
     if created:
         send_welcome_email.delay(instance.id)
+
+
+@receiver(post_save, sender=Product)
+def reset_product_cache(sender, instance: Product, created, **kwargs):
+    # Viewset cache delete
+    # cache.delete_many('api_products/*')
+
+    # if product created, fetch additional metadata
+    if created:
+        cache.set(f"product_supplier_data_{instance.id}", instance.additional_metadata, 60 * 60 * 24)

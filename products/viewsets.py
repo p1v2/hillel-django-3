@@ -1,8 +1,8 @@
+from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
-from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination, CursorPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
@@ -24,10 +24,25 @@ class ProductViewSet(viewsets.ModelViewSet):
     filterset_class = ProductFilter
     filter_backends = [DjangoFilterBackend, OrderingFilter]
 
-    pagination_class = CursorPagination
+    pagination_class = PagePerPagePagination
 
     ordering_fields = ['price', 'title']
     ordering = ['title']
+
+    # Viewset method caching
+    # def list(self, request, *args, **kwargs):
+    #     get_params = request.query_params
+    #     get_params_string = "/".join([f"{key}/{value}" for key, value in dict(get_params).items()])
+    #
+    #     cache_key = f"api_products/{get_params_string}"
+    #     cached_products = cache.get(cache_key)
+    #
+    #     if cached_products:
+    #         return Response(cached_products)
+    #     else:
+    #         response = super().list(request, *args, **kwargs)
+    #         cache.set(cache_key, response.data)
+    #         return response
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
