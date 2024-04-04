@@ -28,6 +28,7 @@ from hillelDjango3.views import registration, obtain_auth_token, long_view
 from products.views import celery_view, products_view
 from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
 from telegram.views import telegram
+from weather.views import weather
 
 router = DefaultRouter()
 router.register('products', ProductViewSet)
@@ -64,4 +65,5 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="index.html")),
     path("accounts/", include("allauth.urls")),
     path("logout", LogoutView.as_view()),
+    path("weather", weather)
 ]

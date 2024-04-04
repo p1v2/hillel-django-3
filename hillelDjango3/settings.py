@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     # Local apps
     'products',
+    'weather',
 ]
 
 MIDDLEWARE = [
@@ -218,6 +219,10 @@ CELERY_BEAT_SCHEDULE = {
     'hello_world': {
         'task': 'products.tasks.hello_world_task',
         'schedule': 10.0,
+    },
+    'get_weather': {
+        'task': 'weather.tasks.get_weather_task',
+        'schedule': 60.0,
     }
 }
 
@@ -269,3 +274,52 @@ LOGIN_REDIRECT_URL = '/admin'
 LOGOUT_REDIRECT_URL = '/'
 
 SOCIALACCOUNT_STORE_TOKENS = True
+
+# Local Memory Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#     }
+# }
+
+# Redis Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_URL"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Memcached Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+#         "LOCATION": os.environ.get("MEMCACHED_URL"),
+#     }
+# }
+
+# File Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+#         "LOCATION": os.path.join(BASE_DIR, "cache"),
+#     }
+# }
+
+# Database Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+#         "LOCATION": "cache_table",
+#     }
+# }
+
+# Dummy Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+#     }
+# }
