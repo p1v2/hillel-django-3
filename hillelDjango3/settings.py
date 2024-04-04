@@ -51,8 +51,16 @@ INSTALLED_APPS = [
     'django_filters',
     "django_celery_beat",
     'django_celery_results',
+    'drf_yasg',
+    "graphene_django",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     # Local apps
     'products',
+    'weather',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +73,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'hillelDjango3.urls'
@@ -81,6 +89,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -207,6 +218,10 @@ CELERY_BEAT_SCHEDULE = {
     'hello_world': {
         'task': 'products.tasks.hello_world_task',
         'schedule': 10.0,
+    },
+    'get_weather': {
+        'task': 'weather.tasks.get_weather_task',
+        'schedule': 60.0,
     }
 }
 
@@ -223,3 +238,92 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 CELERY_RESULT_BACKEND = "django-db"
+
+GRAPHENE = {
+    "SCHEMA": "hillelDjango3.schema.schema"
+}
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
+    },
+}
+
+# Django-allauth
+SITE_ID = 2
+
+LOGIN_REDIRECT_URL = '/admin'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_STORE_TOKENS = True
+
+# Local Memory Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#     }
+# }
+
+# Redis Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_URL"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Memcached Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+#         "LOCATION": os.environ.get("MEMCACHED_URL"),
+#     }
+# }
+
+# File Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+#         "LOCATION": os.path.join(BASE_DIR, "cache"),
+#     }
+# }
+
+# Database Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+#         "LOCATION": "cache_table",
+#     }
+# }
+
+# Dummy Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+#     }
+# }
+
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")

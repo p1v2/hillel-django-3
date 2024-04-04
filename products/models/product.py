@@ -1,4 +1,7 @@
 # Create your models here.
+import time
+
+from django.core.cache import cache
 from django.db import models
 
 from products.models.tag import Tag
@@ -26,6 +29,24 @@ class Product(models.Model):
     # ActiveRecord
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def additional_metadata(self):
+        cache_key = f"product_supplier_data_{self.id}"
+
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            return cached_data
+
+        time.sleep(1)
+        supplier_data = {
+            "storage_type": "fridge",
+            "allegriens": [],
+        }
+
+        cache.set(f"product_supplier_data_{self.id}", supplier_data, 60 * 60 * 24)
+        return supplier_data
 
     def __str__(self):
         return f"{self.title} - {self.price}"
