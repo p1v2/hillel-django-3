@@ -61,9 +61,10 @@ def user_saved(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Product)
 def reset_product_cache(sender, instance: Product, created, **kwargs):
+    pass
     # Viewset cache delete
     # cache.delete_many('api_products/*')
 
     # if product created, fetch additional metadata
-    if created:
-        cache.set(f"product_supplier_data_{instance.id}", instance.additional_metadata, 60 * 60 * 24)
+    # if created:
+    #     cache.set(f"product_supplier_data_{instance.id}", instance.additional_metadata, 60 * 60 * 24)
