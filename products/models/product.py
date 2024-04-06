@@ -1,7 +1,11 @@
 # Create your models here.
+import os
 import time
+from io import BytesIO
 
+from PIL import Image
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
 
 from products.models.tag import Tag
@@ -30,6 +34,8 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
+
     @property
     def additional_metadata(self):
         cache_key = f"product_supplier_data_{self.id}"
@@ -50,3 +56,29 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.price}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        # Compless image to 200x200 (convert to JPEG)
+        if self.image:
+            image = Image.open(self.image)
+            image.thumbnail((200, 200))
+
+            thumb_name, thumb_extension = os.path.splitext(self.image.name)
+
+            thumb_filename = thumb_name + "_thumb" + ".jpg"
+
+            temp_thumb = BytesIO()
+            image.convert("RGB").save(temp_thumb, format='JPEG')
+            temp_thumb.seek(0)
+
+            # set save=False, otherwise it will run in an infinite loop
+            self.image.save(thumb_filename,
+                            SimpleUploadedFile(
+                                thumb_filename,
+                                temp_thumb.read(),
+                                content_type=f"image/jpeg",
+                            ),
+                            save=False)
+            super().save(*args, **kwargs)

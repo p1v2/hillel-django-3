@@ -1,7 +1,8 @@
 import graphene
 import graphene_django
+from django.contrib.auth.models import User
 
-from products.models import Product, Order, Category, Tag
+from products.models import Product, Order, Category, Tag, OrderProduct
 
 
 class CategoryObjectType(graphene_django.DjangoObjectType):
@@ -30,7 +31,18 @@ class PaginatedProductObjectType(graphene.ObjectType):
 class OrderObjectType(graphene_django.DjangoObjectType):
     class Meta:
         model = Order
-        fields = ['uuid']
+        fields = ['uuid', 'user', 'products', 'created_at', 'updated_at', 'display_number']
+
+
+# class OrderProductType(graphene_django.DjangoObjectType):
+#     class Meta:
+#         model = OrderProduct
+#         fields = ['order', 'product', 'quantity']
+
+
+class OrderProductInput(graphene.InputObjectType):
+    product_id = graphene.ID(required=True)
+    quantity = graphene.Int(required=True)
 
 
 class Query(graphene.ObjectType):
@@ -132,10 +144,40 @@ class UpdateProductMutation(graphene.Mutation):
             return UpdateProductMutation(product=None, error=str(e))
 
 
+class CreateOrderMutation(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.ID(required=True)
+        products = graphene.List(OrderProductInput, required=True)
+
+    order = graphene.Field(OrderObjectType)
+    user_errors = graphene.List(graphene.String)
+    error = graphene.String()
+
+    def mutate(self, info, user_id, products):
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return CreateOrderMutation(order=None, user_errors=['User does not exist.'])
+
+        if not products:
+            return CreateOrderMutation(order=None, user_errors=['At least one product is required.'])
+
+        try:
+            order = Order.objects.create(user=user)
+            for product in products:
+                OrderProduct.objects.create(order=order, product=product.product, quantity=product.quantity)
+            return CreateOrderMutation(order=order)
+        except Product.DoesNotExist:
+            return CreateOrderMutation(order=None, user_errors=['One or more products do not exist.'])
+        except Exception as e:
+            return CreateOrderMutation(order=None, error=str(e))
+
+
 class Mutation(graphene.ObjectType):
     create_product = CreateProductMutation.Field()
     update_product = UpdateProductMutation.Field()
     delete_product = graphene.Boolean(id=graphene.ID(required=True))
+    create_order = CreateOrderMutation.Field()
 
     def resolve_delete_product(self, info, id):
         try:
@@ -143,6 +185,10 @@ class Mutation(graphene.ObjectType):
             return True
         except Product.DoesNotExist:
             return False
+
+    def resolve_create_order(self, info, user_id, product_ids):
+
+        return CreateOrderMutation(user_id=user_id, product_ids=product_ids)
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
