@@ -27,6 +27,7 @@ from rest_framework.routers import DefaultRouter
 from hillelDjango3.views import registration, obtain_auth_token, long_view
 from products.views import celery_view, products_view
 from products.viewsets import ProductViewSet, OrderViewSet, RecipeViewSet
+from slots.viewsets import slots, BookingViewSet
 from telegram.views import telegram
 from weather.views import weather
 
@@ -34,6 +35,7 @@ router = DefaultRouter()
 router.register('products', ProductViewSet)
 router.register('orders', OrderViewSet)
 router.register('recipes', RecipeViewSet)
+router.register('bookings', BookingViewSet)
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -65,5 +67,6 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="index.html")),
     path("accounts/", include("allauth.urls")),
     path("logout", LogoutView.as_view()),
-    path("weather", weather)
+    path("weather", weather),
+    path("slots/<int:master_id>/<int:service_id>/<str:date>/", slots),
 ]

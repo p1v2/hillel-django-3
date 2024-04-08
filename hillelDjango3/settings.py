@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # Local apps
     'products',
     'weather',
+    'slots',
 ]
 
 MIDDLEWARE = [
