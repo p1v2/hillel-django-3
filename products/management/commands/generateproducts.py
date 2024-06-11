@@ -32,4 +32,3 @@ class Command(BaseCommand):
         #
         #     product.created_at = random_date
         #     product.save()
-

@@ -9,8 +9,14 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+
+import certifi
+from dotenv import load_dotenv
+import dj_database_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7)b&=%)8_1#-%kts-sqz1ok27k8-8_xeo8k35gejoph2p=zt9-'
+SECRET_KEY = "e)xc!v5&&)72#-d3g+0j2_!c_v^&g0fsm^1v3zydu0ir&a+4x9"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",") + ["0.0.0.0"]
 
 
 # Application definition
@@ -43,8 +49,19 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     "debug_toolbar",
     'django_filters',
+    "django_celery_beat",
+    'django_celery_results',
+    'drf_yasg',
+    "graphene_django",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     # Local apps
     'products',
+    'weather',
+    'slots',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +73,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'hillelDjango3.urls'
@@ -71,6 +90,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -90,8 +112,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgresql',
         'HOST': 'localhost',
-    }
-}
+    }}
 
 
 # Password validation
@@ -150,10 +171,10 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-        }
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['console'],
+        # }
     }
 }
 
@@ -174,3 +195,122 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
 }
+
+# Celery settings
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+
+CELERY_BEAT_SCHEDULE = {
+    'hello_world': {
+        'task': 'products.tasks.hello_world_task',
+        'schedule': 10.0,
+    },
+    'get_weather': {
+        'task': 'weather.tasks.get_weather_task',
+        'schedule': 60.0,
+    }
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+
+os.environ["SSL_CERT_FILE"] = certifi.where()
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+CELERY_RESULT_BACKEND = "django-db"
+
+GRAPHENE = {
+    "SCHEMA": "hillelDjango3.schema.schema"
+}
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
+    },
+}
+
+# Django-allauth
+SITE_ID = 2
+
+LOGIN_REDIRECT_URL = '/admin'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_STORE_TOKENS = True
+
+# Local Memory Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#     }
+# }
+
+# Redis Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_URL"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Memcached Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+#         "LOCATION": os.environ.get("MEMCACHED_URL"),
+#     }
+# }
+
+# File Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+#         "LOCATION": os.path.join(BASE_DIR, "cache"),
+#     }
+# }
+
+# Database Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+#         "LOCATION": "cache_table",
+#     }
+# }
+
+# Dummy Cache
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+#     }
+# }
+
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
