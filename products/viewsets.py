@@ -8,9 +8,9 @@ from rest_framework.response import Response
 
 from hillelDjango3.permissions import IsOwnerOrReadOnly
 from products.filters import ProductFilter
-from products.models import Product, Order, Recipe
+from products.models import Product, Order, Recipe, Store
 from products.pagination import PagePerPagePagination
-from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer
+from products.serializers import ProductSerializer, ProductReadOnlySerializer, OrderSerializer, StoreSerializer
 from products.serializers.recipe import RecipeSerializer
 
 
@@ -79,3 +79,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [IsOwnerOrReadOnly]
+
+
+class StoreViewSet(viewsets.ModelViewSet):
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer
