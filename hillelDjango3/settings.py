@@ -104,31 +104,31 @@ WSGI_APPLICATION = 'hillelDjango3.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
-USE_SQLITE = os.environ.get("USE_SQLITE", "False").lower() == "true"
+#DATABASE_URL = os.environ.get("DATABASE_URL")
+#USE_SQLITE = os.environ.get("USE_SQLITE", "False").lower() == "true"
 
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL)
+#if DATABASE_URL:
+#    DATABASES = {
+#        'default': dj_database_url.config(default=DATABASE_URL)
+#    }
+#elif USE_SQLITE:
+#    DATABASES = {
+#        'default': {
+#            'ENGINE': 'django.db.backends.sqlite3',
+#            'NAME': BASE_DIR / 'db.sqlite3',
+#        }
+#    }
+#else:
+DATABASES = {
+    'default': {
+        # PostgreSQL
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hilleldjango3',
+        'USER': 'postgres',
+        'PASSWORD': '11111',
+        'HOST': 'localhost',
     }
-elif USE_SQLITE:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            # PostgreSQL
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ["DB_NAME"],
-            'USER': os.environ["DB_USER"],
-            'PASSWORD': os.environ["DB_PASSWORD"],
-            'HOST': os.environ["DB_HOST"],
-        }
-    }
+}
 
 
 # Password validation
