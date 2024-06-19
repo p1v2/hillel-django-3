@@ -1,17 +1,16 @@
-from rest_framework import permissions
+import os
+from celery import Celery
+from celery.schedules import crontab
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CourseDjango.settings')
 
-class IsAuthenticatedOrOnlyFeaturedProducts(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return True
+app = Celery('CourseDjango')
+app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()
 
-    def has_object_permission(self, request, view, obj):
-        return obj.featured or request.user.is_authenticated
-
-
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return obj.user == request.user or request.user.is_superuser
+app.conf.CELERY_BEAT_SCHEDULE = {
+    'daily_orders_count': {
+        'task': 'CourseDjango.tasks.daily_order_count',
+        'schedule': crontab(hour=10),
+    }
+}
