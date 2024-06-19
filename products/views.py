@@ -1,35 +1,37 @@
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
-
-from products.models import Product
-from products.tasks import hello_world_task
+from rest_framework import viewsets
+from .tasks import hello_world_task, daily_orders_count
+from .models import Product, Order
 
 
 # Create your views here.
+
+
 def products_view(request, *args, **kwargs):
-    # request.GET {'offset': 1, 'limit': 10}
-    offset = request.GET.get('offset', 0)
-    limit = request.GET.get('limit', 10)
-
-    products = Product.objects.all()[int(offset):int(offset) + int(limit)]
-
-    products_list = []
+    products = Product.objects.all()
+    products_lists = []
 
     for product in products:
-        products_list.append({
+        products_lists.append({
             'title': product.title,
             'description': product.description,
             'price': product.price,
             'summary': product.summary,
             'is_18_plus': product.is_18_plus,
+
         })
-
-    # return JsonResponse({'data': products_list})
-
-    return render(request, 'products.html', {'products': products})
+        return JsonResponse({'data': products_lists})
+        # return render(request, 'products.html', {'products': products_lists})
 
 
 def celery_view(request, *args, **kwargs):
     hello_world_task.delay()
+
+    return HttpResponse("OK")
+
+
+def daily_order_count_view(request, *args, **kwargs):
+    daily_orders_count.delay()
 
     return HttpResponse("OK")

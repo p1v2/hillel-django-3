@@ -9,19 +9,16 @@ token = os.environ.get('TELEGRAM_BOT_TOKEN')
 
 
 def send_message(chat_id, text):
-    telegram_url = f'https://api.telegram.org/bot{token}/sendMessage'
+    telegram_url = f"https://api.telegram.org/bot{token}/sendMessage"
     print(telegram_url)
-
     data = {
         'chat_id': chat_id,
         'text': text
     }
-
     response = requests.post(telegram_url, data=data)
     print(response.json())
 
 
 if __name__ == '__main__':
-    chat_id = 192484569
-    text = "How Are you?"
-    send_message(chat_id, text)
+    chat_id = os.environ['TELEGRAM_BOT_CHAT_ID']
+    send_message(chat_id, 'heyyyyy')
