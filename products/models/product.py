@@ -3,7 +3,7 @@ import os
 import time
 from io import BytesIO
 
-from PIL import Image
+
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
@@ -35,6 +35,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     image = models.ImageField(upload_to='products/', null=True, blank=True)
+    stores = models.ManyToManyField('Store', through='StoreInventory', related_name='products')
 
     @property
     def additional_metadata(self):
